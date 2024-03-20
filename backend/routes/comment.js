@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const {Comment, Post} = require("../models")
-
+const {validation} = require('../middlewares/authentication')
 
 //Get all posts
 router.get('/:postId', async (req,res) => {
@@ -22,7 +22,7 @@ router.get('/:commentId', async (req, res) => {
 })
 
 //Create a new comment
-router.post('/:postId', async (req,res) => {
+router.post('/:postId', validation, async (req,res) => {
   const {postId} = req.params
   const comment = req.body
   const createdPost = await Comment.create({
@@ -33,7 +33,7 @@ router.post('/:postId', async (req,res) => {
 })
 
 //Edit a single post
-router.put('/:commentId', async (req, res) => {
+router.put('/:commentId', validation, async (req, res) => {
   const {commentId} = req.params
   const comment = req.body
   const singleComment = await Comment.update(comment, {
@@ -44,7 +44,7 @@ router.put('/:commentId', async (req, res) => {
   return res.send("Edited")
 })
 
-router.delete('/:commentId', async (req, res) => {
+router.delete('/:commentId', validation, async (req, res) => {
   const {commentId} = req.params
   await Post.destroy({
     where:{

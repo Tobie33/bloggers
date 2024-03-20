@@ -8,36 +8,40 @@ const {validation} = require('../middlewares/authentication')
 
 router.post('/', async (req, res) => {
   const {email, password} = req.body
+  console.log(email)
 
   if (!email || !password) {
     res.status(400)
-    return res.json({error: "Fill in all the required fields"})
+    return res.send("Fill in all the required fields")
   }
 
-  const duplicateCheck = await User.findOne({email})
+  const duplicateCheck = await User.findOne({where:{
+    email
+  }})
 
   if (duplicateCheck) {
     res.status(400)
-    return res.json({error: "Email already exists"})
-
+    return res.send("Email already exists")
   } else {
     bcrypt.hash(password, 10).then(hash => {
       User.create({
         email,
         password: hash
       })
-      return res.send("Success")
+      .then(user => {
+        const accessToken = sign({username: user.username, id:user.id}, process.env.TOKEN_SECRET)
+        return res.send({accessToken, id: user.id})
+      })
     })
   }
 })
 
-//add Middleware once backend complete
 router.post('/login', async (req, res) => {
   const {email, password} = req.body
 
   if (!email || !password) {
     res.status(400)
-    return res.json({error: "Fill in all the required fields"})
+    return res.send("Fill in all the required fields")
   }
 
   const user = await User.findOne({
@@ -48,20 +52,23 @@ router.post('/login', async (req, res) => {
 
   if(!user){
     res.status(404)
-    return res.json({error: "Email does not exist"})
+    return res.send("Email does not exist")
   }
 
   bcrypt.compare(password, user.password).then(match => {
     if(!match){
       res.status(400)
-      return res.json({error: "Password Incorrect"})
+      return res.send("Password Incorrect")
     }
-    console.log(process.env.TOKEN_SECRET)
     const accessToken = sign({username: user.username, id:user.id}, process.env.TOKEN_SECRET)
 
     res.status(200)
-    return res.json(accessToken)
+    return res.json({accessToken, id: user.id})
   })
+})
+
+router.get('/user', validation, async (req,res) => {
+  return res.send(req.user)
 })
 
 module.exports = router

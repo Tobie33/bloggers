@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const {Post, Comment} = require("../models")
+const {validation} = require('../middlewares/authentication')
 
 
 //Get all posts
@@ -20,14 +21,15 @@ router.get('/:postId', async (req, res) => {
 })
 
 //Create a new post
-router.post('/', async (req,res) => {
+router.post('/', validation, async (req,res) => {
   const post = req.body
+  console.log(req.user)
   const createdPost = await Post.create(post)
   return res.send(createdPost)
 })
 
 //Edit a single post
-router.put('/:postId', async (req, res) => {
+router.put('/:postId', validation, async (req, res) => {
   const {postId} = req.params
   const post = req.body
   const singlePost = await Post.update(post, {
@@ -38,7 +40,7 @@ router.put('/:postId', async (req, res) => {
   return res.send("Edited")
 })
 
-router.delete('/:postId', async (req, res) => {
+router.delete('/:postId', validation, async (req, res) => {
   const {postId} = req.params
   await Post.destroy({
     where:{

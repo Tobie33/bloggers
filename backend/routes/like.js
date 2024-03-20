@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const {Like} = require("../models")
+const {validation} = require('../middlewares/authentication')
+
 
 //Create a new comment
-router.post('/', async (req,res) => {
+router.post('/', validation, async (req,res) => {
   const {PostId, UserId} = req.body
   const likeCheck = await Like.findOne({
     where:{

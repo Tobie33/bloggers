@@ -1,6 +1,10 @@
 <template>
-  <div v-for="post in posts" :key="post.id">
-    <PostBlock :post="post"/>
+  <div id="post-list">
+    <template v-for="post in posts" :key="post.id">
+      <router-link :to="{name: 'Post', params: {postId: post.id}}">
+        <PostBlock :post="post"/>
+      </router-link>
+    </template>
   </div>
 </template>
 
@@ -18,5 +22,10 @@ export default {
 </script>
 
 <style>
+#post-list{
+  display:flex;
+  gap: 50px 10px;
+  flex-wrap: wrap;
+}
 
 </style>

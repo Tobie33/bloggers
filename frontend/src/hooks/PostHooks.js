@@ -1,13 +1,24 @@
 import axios from "axios"
 import { ref } from 'vue'
 
-const handlePostSubmit = (title,content) => {
-  axios.post('http://localhost:3001/posts',{
-    title,
-    content
-  })
-  .then(res => console.log(res.data))
-  .catch(err => console.log(err))
+//change format to then -> catch
+const handlePostSubmit = async (title,content) => {
+  try{
+    const data = await axios.post('http://localhost:3001/posts',{
+      title,
+      content
+    },
+    {
+      headers:{
+        accessToken: localStorage.getItem('accessToken')
+      }
+    })
+
+    return data
+
+  }catch(err){
+    console.log(err)
+  }
 }
 
 const getPosts = () => {
@@ -21,4 +32,14 @@ const getPosts = () => {
   return {posts, error}
 }
 
-export {handlePostSubmit, getPosts}
+const getPost = (postId) => {
+  const post = ref({})
+  const error = ref('')
+
+  axios.get(`http://localhost:3001/posts/${postId}`)
+  .then((res) => post.value = res.data)
+  .catch((err) => error.value = err.data)
+
+  return {post, error}
+}
+export {handlePostSubmit, getPosts, getPost}

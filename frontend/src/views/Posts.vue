@@ -25,3 +25,4 @@ export default {
 <style>
 
 </style>
+@/hooks/PostHooks.vue

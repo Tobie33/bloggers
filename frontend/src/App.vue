@@ -1,11 +1,33 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
-    <router-link :to="{ name: 'Posts'}">Pages</router-link> |
-    <router-link :to="{ name: 'PostCreate'}">Create</router-link>
+    <template v-if="Object.keys(user).length === 0">
+      <router-link :to="{ name: 'Login'}">Login</router-link> |
+      <router-link :to="{ name: 'SignUp'}">Sign Up</router-link> |
+    </template>
+    <template v-else>
+      <router-link :to="{ name: 'User'}">User</router-link> |
+      <router-link :to="{ name: 'PostCreate'}">Create</router-link> |
+    </template>
+    <router-link :to="{ name: 'Posts'}">Pages</router-link>
   </nav>
   <router-view/>
 </template>
+<script>
+import {fetchUserInfo} from  '@/hooks/UserHooks'
+export default {
+  setup(){
+
+    const {user, error} = fetchUserInfo()
+
+    console.log(user)
+
+    return {user, error}
+  }
+}
+
+</script>
+
 
 <style>
 #app {
@@ -28,5 +50,10 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+}
+
+a{
+  text-decoration: none;
+  color: #000000
 }
 </style>

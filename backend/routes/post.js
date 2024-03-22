@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {Post, Comment} = require("../models")
+const {Post, Comment, Like} = require("../models")
 const {validation} = require('../middlewares/authentication')
 
 
@@ -8,7 +8,7 @@ const {validation} = require('../middlewares/authentication')
 router.get('/', async (req,res) => {
   const allPosts = await Post.findAll({
     include:
-      [Comment]
+      [Comment, Like]
   })
   return res.send(allPosts)
 })
@@ -16,7 +16,9 @@ router.get('/', async (req,res) => {
 //Get a single post
 router.get('/:postId', async (req, res) => {
   const {postId} = req.params
-  const singlePost = await Post.findByPk(postId)
+  const singlePost = await Post.findByPk(postId, {
+    include: [Comment, Like]
+  })
   return res.send(singlePost)
 })
 

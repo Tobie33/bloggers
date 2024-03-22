@@ -27,7 +27,9 @@ export default {
       signUpError.value = error.value
       if(Object.keys(userInfo.value).length !== 0){
         localStorage.setItem("accessToken", userInfo.value.accessToken)
-        router.push('/')
+        // reload would trigger before the push method so await is needed
+        await router.push('/')
+        router.go(0)
       }
     }
 

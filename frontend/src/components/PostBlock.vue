@@ -5,6 +5,10 @@
     </div>
     <div id="post-content">
       <p>{{ post.content }}</p>
+      <div>
+        <font-awesome-icon icon="fa-regular fa-thumbs-up" /> {{ post.Likes?.length }}
+        <font-awesome-icon icon="fa-regular fa-message" />{{ post.Comments?.length }}
+      </div>
     </div>
   </div>
 </template>

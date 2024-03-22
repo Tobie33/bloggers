@@ -8,21 +8,28 @@
     <template v-else>
       <router-link :to="{ name: 'User'}">User</router-link> |
       <router-link :to="{ name: 'PostCreate'}">Create</router-link> |
+      <button @click="logout">Logout</button>
     </template>
     <router-link :to="{ name: 'Posts'}">Pages</router-link>
   </nav>
-  <router-view/>
+  <router-view />
 </template>
 <script>
 import {fetchUserInfo} from  '@/hooks/UserHooks'
+import { useRouter } from 'vue-router'
 export default {
   setup(){
 
+    const router = useRouter()
+
     const {user, error} = fetchUserInfo()
 
-    console.log(user)
+    const logout = () => {
+      localStorage.removeItem('accessToken')
+      router.go(0)
+    }
 
-    return {user, error}
+    return {user, error, logout}
   }
 }
 

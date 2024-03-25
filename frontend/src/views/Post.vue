@@ -14,8 +14,8 @@
       </template>
       {{ post.Likes?.length }}
     </div>
-    <template v-for="comment in post.Comments" :key="comment.id">
-      <div>
+    <template v-for="comment in post.Comments" >
+      <div :key="comment.id">
         <h3>{{ comment.title }}</h3>
         <p>{{ comment.content }}</p>
         <button @click="handleDelete(comment.id)">Destroy</button>

@@ -6,6 +6,7 @@ import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import User from '../views/User.vue'
 import Post from '../views/Post.vue'
+import SignUpConfig from '@/views/SignUpConfig.vue'
 
 
 const routes = [
@@ -44,6 +45,11 @@ const routes = [
     path: '/user',
     name: 'User',
     component: User
+  },
+  {
+    path: '/signup/config',
+    name: 'SignUpConfig',
+    component: SignUpConfig
   }
 ]
 

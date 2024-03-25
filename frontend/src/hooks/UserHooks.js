@@ -44,4 +44,11 @@ const fetchUserInfo = () => {
   return {user, error}
 }
 
-export {handleSignUp, handleLogin, fetchUserInfo}
+const uploadImage = async (formData) => {
+  console.log(formData)
+  await axios.post('http://localhost:3001/auth/image', formData ,{ headers: {'Content-Type': 'multipart/form-data'}})
+  .then(res => console.log(res))
+  .catch(err => console.log(err))
+}
+
+export {handleSignUp, handleLogin, fetchUserInfo, uploadImage}
